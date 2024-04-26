@@ -201,15 +201,27 @@ class login_twitch extends gen_class {
 		return false;
 	}
 
+	//Change to properly fetch user data from Twitch's API
 	public function fetchUserData($userId, $accessToken){
-		$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/helix/users?id=".$userId, array('Authorization: Bearer '.$accessToken));
+		$clientId = $this->appid; // Get the client ID
+		$headers = array('Authorization: Bearer '.$accessToken, 'Client-ID: '.$clientId);
+		$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/helix/users?id=".$userId, $headers);
 		if($accountResponse){
 			$arrAccountResponse = json_decode($accountResponse, true);
 			return (isset($arrAccountResponse['data'][0])) ? $arrAccountResponse['data'][0] : false;
 		}
-
 		return false;
 	}
+	
+	//public function fetchUserData($userId, $accessToken){
+	//	$accountResponse = register('urlfetcher')->fetch("https://api.twitch.tv/helix/users?id=".$userId, array('Authorization: Bearer '.$accessToken));
+	//	if($accountResponse){
+	//		$arrAccountResponse = json_decode($accountResponse, true);
+	//		return (isset($arrAccountResponse['data'][0])) ? $arrAccountResponse['data'][0] : false;
+	//	}
+
+	//	return false;
+	//}
 
 
 	/**
